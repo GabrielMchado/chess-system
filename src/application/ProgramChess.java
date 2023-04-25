@@ -19,7 +19,7 @@ public class ProgramChess {
 		ChessMatch chess =  new ChessMatch();
 		List<ChessPiece> captured = new ArrayList<ChessPiece>();
 		
-		while(true) {
+		while(!chess.getCheckMate()) {
 			try {
 				UI.clearScreen();
 				UI.printMatch(chess, captured);
@@ -48,6 +48,8 @@ public class ProgramChess {
 				sc.nextLine();
 			}
 		}
+		UI.clearScreen();
+		UI.printMatch(chess, captured);
 		
 	}
 
