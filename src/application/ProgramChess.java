@@ -29,7 +29,7 @@ public class ProgramChess {
 				
 				boolean[][] possibleMoves = chess.possibleMoves(source);
 				UI.clearScreen();
-				UI.printBoard(chess.getPiece(), possibleMoves);
+				UI.printBoard(chess.getPieces(), possibleMoves);
 		
 				
 				System.out.println();
