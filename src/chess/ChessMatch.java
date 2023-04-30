@@ -1,5 +1,6 @@
 package chess;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -88,7 +89,6 @@ public class ChessMatch {
 		
 		ChessPiece movedPiece = (ChessPiece)board.piece(target);
 		
-		// #specialmove promotion
 		promoted = null;
 		if (movedPiece instanceof Pawn) {
 			if ((movedPiece.getColor() == Color.WHITE && target.getRow() == 0) || (movedPiece.getColor() == Color.BLACK && target.getRow() == 7)) {
@@ -106,7 +106,6 @@ public class ChessMatch {
 			nextTurn();
 		}
 		
-		// #specialmove en passant
 		if (movedPiece instanceof Pawn && (target.getRow() == source.getRow() - 2 || target.getRow() == source.getRow() + 2)) {
 			enPassantVulnerable = movedPiece;
 		}
@@ -122,7 +121,7 @@ public class ChessMatch {
 			throw new IllegalStateException("There is no piece to be promoted");
 		}
 		if (!type.equals("B") && !type.equals("N") && !type.equals("R") & !type.equals("Q")) {
-			return promoted;
+			throw new InvalidParameterException("Invalid type for promoved"); 
 		}
 		
 		PositionChessPiece pos = promoted.getChessPosition().toPosition();
@@ -154,7 +153,6 @@ public class ChessMatch {
 			capturedPieces.add(capturedPiece);
 		}
 		
-		// #specialmove castling kingside rook
 		if (p instanceof King && target.getColumn() == source.getColumn() + 2) {
 			PositionChessPiece sourceT = new PositionChessPiece(source.getRow(), source.getColumn() + 3);
 			PositionChessPiece targetT = new PositionChessPiece(source.getRow(), source.getColumn() + 1);
@@ -163,7 +161,6 @@ public class ChessMatch {
 			rook.increaseMoveCount();
 		}
 
-		// #specialmove castling queenside rook
 		if (p instanceof King && target.getColumn() == source.getColumn() - 2) {
 			PositionChessPiece sourceT = new PositionChessPiece(source.getRow(), source.getColumn() - 4);
 			PositionChessPiece targetT = new PositionChessPiece(source.getRow(), source.getColumn() - 1);
@@ -172,7 +169,6 @@ public class ChessMatch {
 			rook.increaseMoveCount();
 		}		
 		
-		// #specialmove en passant
 		if (p instanceof Pawn) {
 			if (source.getColumn() != target.getColumn() && capturedPiece == null) {
 				PositionChessPiece pawnPosition;
@@ -202,7 +198,6 @@ public class ChessMatch {
 			piecesOnTheBoard.add(capturedPiece);
 		}
 
-		// #specialmove castling kingside rook
 		if (p instanceof King && target.getColumn() == source.getColumn() + 2) {
 			PositionChessPiece sourceT = new PositionChessPiece(source.getRow(), source.getColumn() + 3);
 			PositionChessPiece targetT = new PositionChessPiece(source.getRow(), source.getColumn() + 1);
@@ -211,7 +206,6 @@ public class ChessMatch {
 			rook.decreaseMoveCount();
 		}
 
-		// #specialmove castling queenside rook
 		if (p instanceof King && target.getColumn() == source.getColumn() - 2) {
 			PositionChessPiece sourceT = new PositionChessPiece(source.getRow(), source.getColumn() - 4);
 			PositionChessPiece targetT = new PositionChessPiece(source.getRow(), source.getColumn() - 1);
@@ -220,7 +214,6 @@ public class ChessMatch {
 			rook.decreaseMoveCount();
 		}
 		
-		// #specialmove en passant
 		if (p instanceof Pawn) {
 			if (source.getColumn() != target.getColumn() && capturedPiece == enPassantVulnerable) {
 				ChessPiece pawn = (ChessPiece)board.removePiece(target);
